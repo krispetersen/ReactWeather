@@ -11,11 +11,13 @@ var Weather = React.createClass({
     }
   },
   handleSearch: function (location) {
-    var that = this; { /* need to use to all us to use 'this' within the openWeatherMap function */ }
+    var that = this; {/* need to use to all us to use 'this' within the openWeatherMap function */}
 
     this.setState({
       isLoading: true,
-      errorMessage: undefined
+      errorMessage: undefined,
+      location: undefined,
+      temp: undefined
     });
 
     openWeatherMap.getTemp(location).then(function (temp) {
@@ -31,6 +33,22 @@ var Weather = React.createClass({
       });
       alert(errorMessage);
     });
+  },
+  componentDidMount: function () {
+    var location = this.props.location.query.location;
+
+    if (location && location.length > 0) {
+      this.handleSearch(location);
+      window.location.hash = '#/'; {/* Clear out location */}
+    }
+  },
+  componentWillReceiveProps: function (newProps) {
+    var location = newProps.location.query.location;
+
+    if (location && location.length > 0) {
+      this.handleSearch(location);
+      window.location.hash = '#/'; {/* Clear out location */}
+    }
   },
   render: function () {
     var {isLoading, temp, location, errorMessage} = this.state; {/* ES6 way to set variables of the same name */}
