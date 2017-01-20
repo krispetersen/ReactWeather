@@ -5,10 +5,10 @@ var app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(function (req, res, next) {
-  if (req.headers['x-forwarded-proto'] === 'http') {
-    next();
+  if (req.headers['x-forwarded-proto'] === 'https') {
+    res.redirect('http://' + req.hostname + req.url); /* Redirect https traffic to http since that's all our free OpenWeather plan can handle */
   } else {
-    res.redirect('http://' + req.hostname + req.url); /* Redirect https traffic to http since that's all our free Heroku plan can handle */
+    next();
   }
 });
 
